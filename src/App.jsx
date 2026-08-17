@@ -1,4 +1,4 @@
-import React from "reacttttttt"
+import React from "react"
 import Products from "./context/products"
 import "./App.css"
 // import "./"
