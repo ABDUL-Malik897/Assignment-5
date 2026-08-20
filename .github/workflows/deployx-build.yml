@@ -6,6 +6,7 @@ on:
       branch:
         required: true
         type: string
+
       root_directory:
         required: false
         type: string
@@ -21,6 +22,11 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
       - name: Show environment
         run: |
           echo "Branch: ${{ inputs.branch }}"
@@ -32,13 +38,13 @@ jobs:
         working-directory: ${{ inputs.root_directory }}
         shell: bash
         run: |
-            if [ -f package-lock.json ]; then
-              echo "package-lock.json found. Using npm ci..."
-              npm ci --no-audit --no-fund
-            else
-              echo "No package-lock.json found. Using npm install..."
-              npm install --no-audit --no-fund
-            fi
+          if [ -f package-lock.json ]; then
+            echo "package-lock.json found. Using npm ci..."
+            npm ci --no-audit --no-fund
+          else
+            echo "No package-lock.json found. Using npm install..."
+            npm install --no-audit --no-fund
+          fi
 
       - name: Build project
         working-directory: ${{ inputs.root_directory }}
