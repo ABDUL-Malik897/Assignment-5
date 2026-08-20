@@ -1,0 +1,37 @@
+name: DeployX Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        required: true
+        type: string
+      root_directory:
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Show environment
+        run: |
+          echo "Branch: ${{ inputs.branch }}"
+          echo "Root directory: ${{ inputs.root_directory }}"
+          node --version
+          npm --version
+
+      - name: Install dependencies
+        working-directory: ${{ inputs.root_directory }}
+        run: npm ci --no-audit --no-fund
+
+      - name: Build project
+        working-directory: ${{ inputs.root_directory }}
+        run: npm run build
