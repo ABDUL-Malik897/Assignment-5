@@ -30,7 +30,15 @@ jobs:
 
       - name: Install dependencies
         working-directory: ${{ inputs.root_directory }}
-        run: npm ci --no-audit --no-fund
+        shell: bash
+        run: |
+            if [ -f package-lock.json ]; then
+              echo "package-lock.json found. Using npm ci..."
+              npm ci --no-audit --no-fund
+            else
+              echo "No package-lock.json found. Using npm install..."
+              npm install --no-audit --no-fund
+            fi
 
       - name: Build project
         working-directory: ${{ inputs.root_directory }}
